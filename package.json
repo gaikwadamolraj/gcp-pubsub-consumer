@@ -1,0 +1,23 @@
+{
+  "name": "pubsub-consumer",
+  "version": "1.0.0",
+  "description": "Consumer for pub sub",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "type": "module",
+  "author": {
+    "email": "gaikwadamolraj@gmail.com",
+    "name": "Amol Gaikwad"
+  },
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "dependencies": {
+    "@google-cloud/pubsub": "^4.0.6"
+  }
+}
