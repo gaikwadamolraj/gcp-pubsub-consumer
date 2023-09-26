@@ -2,14 +2,9 @@ package com.example.compliance.model;
 
 import java.sql.Blob;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import jakarta.persistence.*;
+
+import lombok.*;
 
 @Entity
 @Getter
@@ -18,7 +13,7 @@ import lombok.ToString;
 @ToString
 public class Compliance {
     @Id
-    @GeneratedValue()
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
     private String projectName;
