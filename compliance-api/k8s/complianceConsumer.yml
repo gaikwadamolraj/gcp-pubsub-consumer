@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: compliance-api
+spec:
+  selector:
+    matchLabels:
+      app: compliance-api
+  template:
+    metadata:
+      labels:
+        app: compliance-api
+    spec:
+      volumes:
+      - name: google-cloud-key
+        secret:
+          secretName: pubsub-key
+      containers:
+      - name: compliance-api
+        image: burner-amogaikw1/compliance-api:1
+        volumeMounts:
+        - name: google-cloud-key
+          mountPath: /var/secrets/google
+        env:
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: /var/secrets/google/key.json
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"

@@ -1,14 +1,32 @@
+import { insert } from "./PgClient.js";
+
 const reports = [];
 
-export const saveMessage = (report) => {
-  return new Promise((resolve, reject) => {
-    try {
-      reports.push(report);
-      resolve();
-    } catch (error) {
-      reject(error);
-    }
-  });
+export const saveMessage = async (report) => {
+  try {
+    console.log("Saving msg into db");
+    await insert({
+      env: "PROD",
+      failed: 0,
+      project_name: "External Gateway",
+      status: "Pass",
+      total: 10,
+      total_passed: 10,
+    });
+    return true;
+  } catch (error) {
+    console.error(`Failed to insert data into db. ${error}`);
+    return false;
+  }
+
+  // return new Promise((resolve, reject) => {
+  //   try {
+  //     reports.push(report);
+  //     resolve();
+  //   } catch (error) {
+  //     reject(error);
+  //   }
+  // });
 };
 
 const ackMessage = async (message) => {
@@ -29,8 +47,10 @@ export const processMessage = async (message) => {
   console.log("Message received: ", message.data.toString());
   if (validateData(message.data)) {
     try {
-      await saveMessage(JSON.stringify(message.data));
-      await ackMessage(message);
+      const status = await saveMessage(JSON.stringify(message.data));
+      if (status) {
+        await ackMessage(message);
+      }
     } catch (error) {
       console.error(`Failed to process message`);
       // For now we are ack to message but actual we need to push in
