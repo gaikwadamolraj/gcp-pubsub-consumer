@@ -15,9 +15,15 @@ spec:
       - name: google-cloud-key
         secret:
           secretName: pubsub-key
+      - name: database-config
+        configMap:
+          name: app-database-config
+      - name: database-authentication
+        secret:
+          secretName: app-database-auth
       containers:
       - name: compliance-consumer
-        image: burner-amogaikw1/compliance-consumer:1
+        image: compliance-consumer:1
         volumeMounts:
         - name: google-cloud-key
           mountPath: /var/secrets/google

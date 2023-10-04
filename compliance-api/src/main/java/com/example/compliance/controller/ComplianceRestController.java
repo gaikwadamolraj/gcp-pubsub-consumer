@@ -7,16 +7,13 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.compliance.model.Compliance;
 import com.example.compliance.repository.ComplianceRepo;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/compliances")
 public class ComplianceRestController {
     @Autowired
     ComplianceRepo complianceRepo;
@@ -26,23 +23,14 @@ public class ComplianceRestController {
         return "Running";
     }
 
-    @GetMapping("/compliance")
+    @GetMapping()
     public ResponseEntity<List<Compliance>> getAllCompliances() {
-        // Compliance complianceData = new Compliance();
-        // complianceData.setEnv("PROD");
-        // complianceData.setStatus("PASS");
-        // complianceData.setTotal(50);
-        // complianceData.setTotalPassed(50);
-        // complianceData.setFailed(0);
-        // complianceData.setProjectName("External Gateway");
-        // complianceData.setReport(null);
-        // complianceRepo.save(complianceData);
         List<Compliance> compliance = new ArrayList<Compliance>();
         complianceRepo.findAll().forEach(compliance::add);
         return new ResponseEntity<List<Compliance>>(compliance, HttpStatus.OK);
     }
 
-    @GetMapping("/compliance/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Compliance> getComplianceById(@PathVariable("id") long id) {
 
         Optional<Compliance> compliance = complianceRepo.findById(id);
@@ -51,5 +39,18 @@ public class ComplianceRestController {
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+
+    @PutMapping("")
+    public ResponseEntity<Compliance> putComplianceData(@RequestBody Compliance compliance) {
+//        Compliance complianceData = new Compliance();
+//        complianceData.setEnv("PROD");
+//        complianceData.setStatus("PASS");
+//        complianceData.setTotal(50);
+//        complianceData.setTotalPassed(50);
+//        complianceData.setFailed(0);
+//        complianceData.setProjectName("External Gateway");
+//        complianceData.setReport(null);
+        return new ResponseEntity<Compliance>(complianceRepo.save(compliance), HttpStatus.CREATED);
     }
 }
