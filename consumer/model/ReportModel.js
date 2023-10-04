@@ -1,21 +1,33 @@
+import { pushMessageToApi } from "../utils/index.js";
 import { insert } from "./PgClient.js";
 
 const reports = [];
 
-export const saveMessage = async (report) => {
+export const saveMessage = async (message) => {
   try {
-    console.log("Saving msg into db");
-    await insert({
-      env: "PROD",
-      failed: 0,
-      project_name: "External Gateway",
-      status: "Pass",
-      total: 10,
-      total_passed: 10,
-    });
+    const { data: report } = message;
+    const payload = {
+      projectName: report.project_name,
+      env: report.env,
+      status: report.status,
+      total_passed: report.total_passed,
+      total: report.total,
+      failed: report.failed,
+    };
+
+    console.log(" payload ", payload);
+    if (process.env.API_URL) {
+      const response = await pushMessageToApi(payload);
+      console.log(" pushed date to REST ", response.status, response.body);
+      // const savedData = await response.json();
+    } else {
+      console.log(" Saved data into db ");
+      await insert(payload);
+    }
+
     return true;
   } catch (error) {
-    console.error(`Failed to insert data into db. ${error}`);
+    console.error(`Failed to insert data with error ${error}`);
     return false;
   }
 
@@ -47,7 +59,7 @@ export const processMessage = async (message) => {
   console.log("Message received: ", message.data.toString());
   if (validateData(message.data)) {
     try {
-      const status = await saveMessage(JSON.stringify(message.data));
+      const status = await saveMessage(validateData(message.data));
       if (status) {
         await ackMessage(message);
       }

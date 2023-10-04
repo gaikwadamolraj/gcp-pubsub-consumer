@@ -4,11 +4,14 @@ import { processMessage } from "./model/ReportModel.js";
 // authenticate application using below command
 // gcloud auth application-default login
 const subscribeConsumer = async () => {
-  console.log("subscribe to pubsub");
   const projectId = "burner-amogaikw1";
   const topicNameOrId = `projects/${projectId}/topics/compliance-topic`;
   const subscriptionName = `compliance-topic-sub`;
 
+  console.log(
+    "Subscribed to topic compliance-topic with sub ",
+    subscriptionName
+  );
   const pubSubClient = new PubSub({ projectId });
   const subscribe = await pubSubClient.subscription(subscriptionName, {
     batching: {
